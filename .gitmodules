@@ -1,0 +1,6 @@
+[submodule "quantum_network_simulation_0708"]
+	path = quantum_network_simulation_0708
+	url = https://github.com/nguyenhuyuit0708/quantum_network_simulation_0708.git
+[submodule "SeQUeNCe"]
+	path = SeQUeNCe
+	url = https://github.com/sequence-toolbox/SeQUeNCe.git

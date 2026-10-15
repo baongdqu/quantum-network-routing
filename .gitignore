@@ -2,4 +2,3 @@ venv/
 __pycache__/
 *.pyc
 .env
-quantum_network_simulation_0708/
