@@ -1,0 +1,124 @@
+{
+  "nodes": [
+    {
+      "name": "Alice",
+      "type": "QuantumRouter",
+      "seed": 0,
+      "memo_size": 50
+    },
+    {
+      "name": "Bob",
+      "type": "QuantumRouter",
+      "seed": 1,
+      "memo_size": 50
+    },
+    {
+      "name": "R_noisy",
+      "type": "QuantumRouter",
+      "seed": 2,
+      "memo_size": 50
+    },
+    {
+      "name": "R_clean1",
+      "type": "QuantumRouter",
+      "seed": 3,
+      "memo_size": 50
+    },
+    {
+      "name": "R_clean2",
+      "type": "QuantumRouter",
+      "seed": 4,
+      "memo_size": 50
+    }
+  ],
+  "qconnections": [
+    {
+      "node1": "Alice",
+      "node2": "R_noisy",
+      "attenuation": 0.001,
+      "distance": 500,
+      "type": "meet_in_the_middle"
+    },
+    {
+      "node1": "R_noisy",
+      "node2": "Bob",
+      "attenuation": 0.001,
+      "distance": 500,
+      "type": "meet_in_the_middle"
+    },
+    {
+      "node1": "Alice",
+      "node2": "R_clean1",
+      "attenuation": 0.0001,
+      "distance": 400,
+      "type": "meet_in_the_middle"
+    },
+    {
+      "node1": "R_clean1",
+      "node2": "R_clean2",
+      "attenuation": 0.0001,
+      "distance": 400,
+      "type": "meet_in_the_middle"
+    },
+    {
+      "node1": "R_clean2",
+      "node2": "Bob",
+      "attenuation": 0.0001,
+      "distance": 400,
+      "type": "meet_in_the_middle"
+    }
+  ],
+  "stop_time": 2000000000000,
+  "cconnections": [
+    {
+      "node1": "Alice",
+      "node2": "Bob",
+      "delay": 1000000000
+    },
+    {
+      "node1": "Alice",
+      "node2": "R_noisy",
+      "delay": 500000000
+    },
+    {
+      "node1": "Alice",
+      "node2": "R_clean1",
+      "delay": 500000000
+    },
+    {
+      "node1": "Alice",
+      "node2": "R_clean2",
+      "delay": 1000000000
+    },
+    {
+      "node1": "Bob",
+      "node2": "R_noisy",
+      "delay": 500000000
+    },
+    {
+      "node1": "Bob",
+      "node2": "R_clean1",
+      "delay": 1000000000
+    },
+    {
+      "node1": "Bob",
+      "node2": "R_clean2",
+      "delay": 500000000
+    },
+    {
+      "node1": "R_noisy",
+      "node2": "R_clean1",
+      "delay": 1000000000
+    },
+    {
+      "node1": "R_noisy",
+      "node2": "R_clean2",
+      "delay": 1000000000
+    },
+    {
+      "node1": "R_clean1",
+      "node2": "R_clean2",
+      "delay": 500000000
+    }
+  ]
+}

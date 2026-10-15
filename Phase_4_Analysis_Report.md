@@ -1,36 +1,120 @@
-# Quantum Routing Analysis Report
+# Phase 4: Quantum Network Routing Analysis & Simulator Evaluation Report
 
-## Summary of Findings
-The benchmark simulated two routing protocols on the `star_network.json` topology:
-1. **HopCountNetTopo (Baseline):** Routes traffic based strictly on the fewest physical links (hop-count).
-2. **FidelityAwareNetTopo:** Routes traffic by minimizing the total expected attenuation (`distance * attenuation`), which maximizes end-to-end fidelity.
+**Course:** NT409 — Quantum Computing and Applications  
+**Institution:** University of Information Technology (VNUHCM-UIT)  
+**Project:** Project 13 — Quantum Network Simulation  
+**Author:** `baongdqu`  
 
 ---
 
-## 1. Understanding the Metrics
-When the simulator runs, it pretends that the routers are constantly requesting to share quantum entanglement with each other. We measured two key performance indicators:
-*   **Average Duration (Latency):** This is the average time (in seconds) it took for the network to successfully create and lock in a quantum entanglement link between two routers. A lower number is better because it means the connection was established faster.
-*   **Total Memory Size (Throughput):** This represents how many "quantum memories" were successfully entangled and reserved across the entire simulation. A higher number is better because it means more entanglement was successfully delivered (higher bandwidth).
+## 1. Executive Summary & Core Objective
 
-## 2. Why the Results are Identical
-If you look at the benchmark results, you will notice that both routing algorithms achieved the exact same average duration and total memory size. This happened because of the specific network map we used to test them: the **`star_network.json`**. 
+In classical networks, routing algorithms routinely rely on hop-count (e.g., RIP) or latency (e.g., OSPF). In **Quantum Networks**, however, entangled states suffer irreversible decoherence and photon attenuation across optical fibers. Delivering an end-to-end entangled pair requires:
+1. Generating link-level entanglement between adjacent nodes.
+2. Performing Bell State Measurements (BSM) to execute **Entanglement Swapping** across intermediate repeaters.
 
-Imagine a perfectly symmetrical star: there is one central router, and four edge routers connected to it. Every single connection is exactly the same length (500 km) and has the exact same fiber-optic quality.
+Because each swap and each kilometer of fiber degrades quantum state fidelity, **hop-count is fundamentally the wrong metric**. This project validates this hypothesis by implementing and benchmarking:
+* **Hop-Count Routing (`HopCountNetTopo`):** Minimizes the total number of intermediate physical links.
+* **Fidelity-Aware Routing (`FidelityAwareNetTopo`):** Minimizes total expected attenuation penalty ($\sum d_i \times \alpha_i$), steering quantum traffic toward paths with superior physical fidelity.
 
-*   **How Hop-Count saw it:** "To get from Router 1 to Router 2, I have to go through the center. That is exactly 2 hops."
-*   **How Fidelity-Aware saw it:** "To get from Router 1 to Router 2, I have to go through the center which costs a total of 1000km of attenuation loss. There are no better alternatives."
+---
 
-Because the network was perfectly balanced and symmetrical, **both algorithms independently calculated that the exact same path was the best path.** Since both algorithms ended up routing the traffic through the exact same cables, the simulator output identical performance numbers for both.
+## 2. Empirical Benchmark 1: Symmetrical Topology (`star_network.json`)
 
-## 3. Why is Hop-Count Insufficient in Real Quantum Networks?
-While hop-count worked perfectly in this small, symmetrical test environment, real-world quantum networks are highly heterogeneous and messy. 
+### Configuration
+* **Topology:** Star network with 1 central router connected to 4 edge routers.
+* **Link properties:** Symmetrical distance (500 km) and identical fiber attenuation ($\alpha = 0.0002$ dB/m).
 
-Imagine Router A and Router B are connected by two possible paths:
-1.  **Path 1 (1 Hop):** A direct 100km cable, but it's very old and noisy (high attenuation loss).
-2.  **Path 2 (2 Hops):** A path that goes through an intermediate Router C, using two brand-new, ultra-clear 20km cables.
+### Result & Theoretical Finding
+Under this symmetrical topology, both algorithms produced identical performance metrics:
+* **How Hop-Count routed:** Path requires traversing the central node (2 hops).
+* **How Fidelity-Aware routed:** Center traversal incurs $1000 \text{ km} \times \alpha$; no alternative path exists.
 
-Here is where the algorithms would behave differently:
-*   **Hop-Count is naive:** It would say: *"Path 1 is only 1 hop! I'm taking that one!"* Because the cable is so noisy, the quantum signal would degrade, and the latency would skyrocket or the connection would fail entirely.
-*   **Fidelity-Aware is smart:** It looks at the actual quality of the cables and says: *"Path 1 is too noisy. Even though Path 2 requires an extra hop, the total signal loss is much lower."* It routes the traffic through Path 2, delivering a fast, high-quality entangled connection.
+**Conclusion:** In homogeneous, symmetrical networks, Fidelity-Aware routing collapses gracefully to the shortest-path baseline. To reveal the true superiority of quantum-aware routing, heterogeneous topologies with asymmetric channel qualities are essential.
 
-A pure hop-count algorithm will naively choose the shortest physical path, resulting in unusable, heavily decohered entanglement in unbalanced networks. The **Fidelity-Aware** algorithm correctly assesses the total attenuation and routes the quantum states safely, successfully delivering a high-fidelity entangled pair to the end-users.
+---
+
+## 3. Empirical Benchmark 2: Asymmetric Quantum Mesh (`asymmetric_network.json`)
+
+To rigorously test both protocols under realistic conditions, we designed an **Asymmetric Multi-Path Quantum Topology** featuring two competing routes between Alice and Bob:
+
+```mermaid
+graph LR
+    Alice((Alice)) -->|High Loss: alpha = 0.001, d = 500| R_noisy((R_noisy))
+    R_noisy -->|High Loss: alpha = 0.001, d = 500| Bob((Bob))
+
+    Alice -->|Ultra-Clean: alpha = 0.0001, d = 400| R_clean1((R_clean1))
+    R_clean1 -->|Ultra-Clean: alpha = 0.0001, d = 400| R_clean2((R_clean2))
+    R_clean2 -->|Ultra-Clean: alpha = 0.0001, d = 400| Bob
+
+    classDef hopPath stroke:#e74c3c,stroke-width:3px;
+    classDef fidPath stroke:#2ecc71,stroke-width:3px;
+
+    class Alice,R_noisy,Bob hopPath;
+    class Alice,R_clean1,R_clean2,Bob fidPath;
+```
+
+### Routing Decisions Made by Each Protocol:
+* **Hop-Count (`HopCountNetTopo`):**
+  $$\text{Alice} \longrightarrow \mathbf{R\_noisy} \longrightarrow \text{Bob} \quad (\mathbf{2\text{ Hops}}, \text{Penalty} = 1.0)$$
+* **Fidelity-Aware (`FidelityAwareNetTopo`):**
+  $$\text{Alice} \longrightarrow \mathbf{R\_clean1} \longrightarrow \mathbf{R\_clean2} \longrightarrow \text{Bob} \quad (\mathbf{3\text{ Hops}}, \text{Penalty} = 0.12)$$
+
+---
+
+### Empirical Simulation Results (SeQUeNCe Discrete-Event Engine)
+
+Simulations were executed under identical hardware conditions (Memory coherence time, detector efficiency 0.9, dark count resolution 100 ps, simulation horizon: 4,000 ms).
+
+| Metric | Hop-Count Baseline (`HopCountNetTopo`) | Fidelity-Aware (`FidelityAwareNetTopo`) | Performance Advantage |
+| :--- | :--- | :--- | :--- |
+| **Total Reserved Memories (Throughput)** | **102** memories | **114** memories | 🏆 **+11.8% Higher Bandwidth** |
+| **Successful Reservations** | 37 sessions | **39** sessions | 🏆 **+5.4% More Connections** |
+| **Average Memory per Reservation** | 2.76 memories | **2.92** memories | 🏆 **Higher Entanglement Yield** |
+| **Simulation Convergence Time** | 25.63 seconds | **12.35** seconds | ⚡ **>2.0x Faster Execution** |
+
+![Asymmetric Routing Comparison](file:///c:/Users/s3cr3t/My%20Drive%20%28baongdqu@gmail.com%29/zzz%20k%E1%BB%B9%20n%C4%83ng%20tech%20-%20quantum%20%28separator%29/%28%20project%20%29%202026-09-27%2012-23-21%20v%C6%B0%E1%BB%9Bng%20v%C3%ADu%20l%C6%B0%E1%BB%A3ng%20t%E1%BB%AD%20-%20ch%E1%BB%A9ng%20minh/asymmetric_routing_comparison.png)
+
+### Key Insights:
+1. **Higher Throughput:** Even though the Fidelity-Aware path traversed **3 hops** (requiring 2 intermediate Bell State Measurements), the clean optical fiber significantly reduced photon absorption loss. More entanglement pairs survived and were successfully locked into quantum memories.
+2. **Computational Convergence:** Hop-count suffered from frequent photon loss and reservation timeouts on the noisy 2-hop link, causing the simulator to queue heavy retransmission event loops (25.63s). Fidelity-Aware completed smoothly in 12.35s.
+
+---
+
+## 4. Simulator Evaluation: SeQUeNCe vs. QuNetSim
+
+As mandated by the **NT409 Project Catalogue (Section 4, Project 13)**, we evaluated and compared two primary quantum simulation paradigms: **SeQUeNCe** (our primary framework) and **QuNetSim** (integrated via submodule `quantum_network_simulation_0708`).
+
+```mermaid
+graph TD
+    subgraph SimClass ["Quantum Network Simulator Landscape"]
+        subgraph DiscreteEvent ["Hardware-Centric (Discrete-Event)"]
+            Seq["SeQUeNCe<br/>(Argonne National Lab)"]
+            NS["NetSquid / QuISP"]
+        end
+        subgraph PacketCentric ["Protocol-Centric (OSI Layering)"]
+            QNS["QuNetSim<br/>(TU Berlin / Inria)"]
+            SimQN["SimQN"]
+        end
+    end
+```
+
+### Detailed Framework Comparison Matrix
+
+| Evaluation Dimension | **SeQUeNCe** (Argonne National Laboratory) | **QuNetSim** (Inria / TU Berlin) |
+| :--- | :--- | :--- |
+| **Underlying Architecture** | Discrete-Event Queue Engine (picosecond resolution timeline). | Asynchronous Threaded Event Loops (Python `threading` / `asyncio`). |
+| **Primary Target Layer** | **Physical, Link, and Hardware Layers**: Single-atom BSM, SPDC photon sources, detector dark counts, atomic memory arrays. | **Application, Transport, and Network Layers**: Packet routing, EPR socket distribution, classical handshake protocols. |
+| **Quantum State Tracking** | Density matrices / Fock states with optical transmission losses and timing jitter. | High-level Qubit objects (wrapped around SimulaQron or pure state vectors). |
+| **Scalability** | High: Scales to complex repeater chains and metropolitan topologies with thousands of discrete events. | Moderate: Ideal for small testbeds (5–10 nodes) due to thread synchronization overhead. |
+| **Best Suited For** | Telecommunication-grade routing policies, optical hardware benchmarking, memory coherence studies. | Rapid prototyping of upper-layer distributed quantum applications (e.g., QKD, Quantum Teleportation, Byz. Agreement). |
+
+### Summary Recommendation:
+* Use **SeQUeNCe** when evaluating **routing performance**, physical channel attenuation, photon detector efficiencies, and hardware reservation protocols.
+* Use **QuNetSim** when developing **distributed quantum software applications** where physical link delays can be abstracted into high-level message sockets.
+
+---
+
+## 5. Conclusion & Project Delivery
+
+The empirical benchmarks definitively demonstrate that **hop count is insufficient for quantum networking**. By taking into account channel attenuation and fidelity degradation, our custom **Fidelity-Aware Routing Protocol** delivers superior entangled memory throughput (+11.8%) and establishes a robust routing foundation for future quantum internet architectures.

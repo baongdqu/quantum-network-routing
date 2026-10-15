@@ -40,7 +40,8 @@ def set_parameters(topology, simulation_time, attenuation):
     # set quantum channel parameters
     QC_FREQ = 1e11
     for qc in topology.qchannels:
-        qc.attenuation = attenuation
+        if attenuation is not None:
+            qc.attenuation = attenuation
         qc.frequency = QC_FREQ
 
 def run_simulation(topo_class, network_config, sim_time_ms, qc_atten):
