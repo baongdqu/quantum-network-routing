@@ -1,4 +1,25 @@
+# Python virtual environments
 venv/
+.venv/
+env/
+
+# Python bytecode & cache
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.pyd
+
+# Operating system artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment variables & local secrets
 .env
+.env.local
