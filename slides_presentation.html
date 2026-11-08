@@ -26,16 +26,17 @@
     </script>
     <style>
         :root {
-            --bg-primary: #0a0e17;
-            --bg-secondary: #131b2e;
-            --accent-cyan: #00f2fe;
-            --accent-blue: #4facfe;
-            --accent-purple: #7f00ff;
-            --accent-pink: #e100ff;
-            --text-main: #f0f4fc;
-            --text-dim: #94a3b8;
-            --card-border: rgba(0, 242, 254, 0.2);
-            --card-glow: rgba(0, 242, 254, 0.15);
+            --bg-primary: #f5eedc; /* Vintage antique book paper */
+            --bg-secondary: #ebe0c8; /* Deeper parchment tone */
+            --accent-cyan: #8b3a1a; /* Warm terracotta ink */
+            --accent-blue: #2c4a3e; /* Vintage deep forest teal */
+            --accent-purple: #78350f; /* Antique amber brown */
+            --accent-pink: #9a3412; /* Rust ink */
+            --text-main: #2a241e; /* Classic dark sepia book print */
+            --text-dim: #6b5e51; /* Muted vintage walnut */
+            --card-border: rgba(139, 94, 60, 0.28);
+            --card-glow: rgba(180, 140, 100, 0.15);
+            --card-bg: rgba(254, 250, 243, 0.88);
         }
 
         * {
@@ -60,11 +61,11 @@
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(79, 172, 254, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(225, 0, 255, 0.08) 0%, transparent 40%),
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+                radial-gradient(circle at 10% 20%, rgba(212, 185, 150, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(195, 160, 120, 0.22) 0%, transparent 50%),
+                linear-gradient(rgba(139, 94, 60, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 94, 60, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
             z-index: -1;
             pointer-events: none;
         }
@@ -74,7 +75,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 16px 40px;
-            background: rgba(19, 27, 46, 0.85);
+            background: rgba(235, 224, 200, 0.92);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--card-border);
             z-index: 10;
@@ -87,8 +88,8 @@
         }
 
         .quantum-badge {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            color: #fff;
+            background: linear-gradient(135deg, #78350f, #8b3a1a);
+            color: #fdfbf7;
             font-size: 11px;
             font-weight: 800;
             padding: 4px 10px;
@@ -108,7 +109,7 @@
             font-size: 14px;
             font-weight: 600;
             color: var(--accent-cyan);
-            background: rgba(0, 242, 254, 0.08);
+            background: rgba(139, 58, 26, 0.09);
             padding: 6px 16px;
             border-radius: 20px;
             border: 1px solid var(--card-border);
@@ -161,7 +162,8 @@
         .slide-title {
             font-size: 36px;
             font-weight: 800;
-            background: linear-gradient(90deg, #ffffff, var(--accent-blue));
+            color: #2b1f14;
+            background: linear-gradient(90deg, #2b1f14, #78350f);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
@@ -188,12 +190,12 @@
         }
 
         .card {
-            background: rgba(19, 27, 46, 0.75);
+            background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 28px 32px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 24px rgba(110, 80, 50, 0.12);
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease, border-color 0.3s ease;
@@ -246,7 +248,7 @@
 
         .badge-tag {
             display: inline-block;
-            background: rgba(0, 242, 254, 0.12);
+            background: rgba(139, 58, 26, 0.1);
             color: var(--accent-cyan);
             border: 1px solid rgba(0, 242, 254, 0.3);
             border-radius: 6px;
@@ -274,7 +276,7 @@
             font-size: 56px;
             font-weight: 900;
             line-height: 1.25;
-            background: linear-gradient(135deg, #ffffff 20%, var(--accent-cyan) 60%, var(--accent-pink) 100%);
+            background: linear-gradient(135deg, #2b1f14 20%, #78350f 60%, #8b3a1a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 18px;
@@ -295,7 +297,7 @@
         }
 
         .member-chip {
-            background: rgba(19, 27, 46, 0.85);
+            background: rgba(235, 224, 200, 0.92);
             border: 1px solid var(--card-border);
             padding: 12px 24px;
             border-radius: 30px;
@@ -304,7 +306,7 @@
 
         .member-name {
             font-weight: 700;
-            color: #fff;
+            color: #2b1f14;
         }
 
         .member-id {
@@ -320,12 +322,12 @@
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--card-border);
-            background: rgba(19, 27, 46, 0.9);
+            background: rgba(254, 250, 243, 0.95);
             margin-top: 10px;
         }
 
         table.styled-table th {
-            background: rgba(0, 242, 254, 0.12);
+            background: rgba(139, 58, 26, 0.1);
             color: var(--accent-cyan);
             padding: 16px 22px;
             font-size: 16px;
@@ -338,7 +340,7 @@
             padding: 15px 22px;
             font-size: 15.5px;
             color: var(--text-main);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(139, 94, 60, 0.12);
         }
 
         table.styled-table tr:last-child td {
@@ -346,7 +348,7 @@
         }
 
         table.styled-table tr:hover td {
-            background: rgba(0, 242, 254, 0.04);
+            background: rgba(139, 58, 26, 0.04);
         }
 
         .chart-container {
@@ -355,7 +357,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(10, 14, 23, 0.6);
+            background: rgba(245, 238, 220, 0.95);
             border-radius: 12px;
             border: 1px solid var(--card-border);
             padding: 10px;
@@ -370,8 +372,8 @@
         }
 
         .formula-box {
-            background: rgba(0, 242, 254, 0.06);
-            border-left: 4px solid var(--accent-cyan);
+            background: rgba(139, 58, 26, 0.07);
+            border-left: 4px solid #8b3a1a;
             padding: 16px 22px;
             border-radius: 0 8px 8px 0;
             margin: 12px 0;
@@ -380,7 +382,7 @@
 
         footer {
             padding: 14px 40px;
-            background: rgba(19, 27, 46, 0.85);
+            background: rgba(235, 224, 200, 0.92);
             backdrop-filter: blur(12px);
             border-top: 1px solid var(--card-border);
             display: flex;
@@ -397,7 +399,7 @@
         .dot {
             width: 24px;
             height: 6px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(139, 94, 60, 0.25);
             border-radius: 3px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -415,7 +417,7 @@
         }
 
         .btn {
-            background: rgba(19, 27, 46, 0.9);
+            background: rgba(254, 250, 243, 0.95);
             border: 1px solid var(--card-border);
             color: var(--text-main);
             padding: 9px 20px;
@@ -430,10 +432,10 @@
         }
 
         .btn:hover {
-            background: var(--accent-cyan);
-            color: #0a0e17;
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            background: #78350f;
+            color: #fdfbf7;
+            border-color: #78350f;
+            box-shadow: 0 4px 14px rgba(120, 53, 15, 0.3);
         }
 
         .key-hint {
