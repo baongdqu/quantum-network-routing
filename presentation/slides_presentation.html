@@ -442,6 +442,76 @@
             font-size: 11px;
             color: var(--text-dim);
         }
+    
+        /* Print / PDF Export Styling */
+        @media print {
+            @page {
+                size: 16in 9in; /* Standard 16:9 widescreen presentation page */
+                margin: 0;
+            }
+
+            body {
+                background-color: var(--bg-primary) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                overflow: visible !important;
+                height: auto !important;
+                display: block !important;
+            }
+
+            body::before {
+                display: none !important;
+            }
+
+            header, footer {
+                display: none !important;
+            }
+
+            main {
+                max-width: 100% !important;
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: block !important;
+                position: static !important;
+            }
+
+            .slide {
+                position: relative !important;
+                width: 16in !important;
+                height: 9in !important;
+                box-sizing: border-box !important;
+                padding: 0.8in 1.2in !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                page-break-inside: avoid !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                opacity: 1 !important;
+                transform: none !important;
+                pointer-events: auto !important;
+                background-color: var(--bg-primary) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .card {
+                background: var(--card-bg) !important;
+                border: 1px solid var(--card-border) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-shadow: none !important;
+            }
+
+            .chart-container {
+                height: 420px !important;
+                background: rgba(245, 238, 220, 0.95) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
     </style>
 </head>
 <body>
